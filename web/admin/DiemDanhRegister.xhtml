@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/template.xhtml" >
+            <ui:define name="content" >
+                <p:outputPanel id="opnMain">
+                <p:panelGrid columns="2" layout="grid" columnClasses="ui-g-12 ui-md-4 ui-lg-4, ui-g-12 ui-md-8 ui-lg-8" styleClass="ui-panelgrid-blank">
+                    <p:panel id="panelListRegister" header="DANH SÁCH MÔN HỌC">
+                        <p:commandButton value="Thêm" id="addMonHoc" actionListener="#{khoaController.changeStateAddMonHoc()}" process="@this" update=":form_main:opnMain :form_main:messages" 
+                                              />
+                            
+                        <p:dataTable id="tblMonHoc" value="#{khoaController.mlstMonHoc}" var="ettMonHoc" rowKey="#{ettMonHoc.id}" style="text-align: center"
+                                         selectionMode="single" selection="#{khoaController.monHocSelected}">
+                                
+                            <p:ajax event="rowSelect" listener="#{khoaController.onRowSelectDiemDanh}" process="@this" update=":form_main:tblLop :form_main:messages :form_main:addLop" />
+                                <p:column headerText="Thao Tác">
+                                    <p:commandLink class="pi pi-pencil" title="Sửa" actionListener="#{khoaController.changeStateEditMonHoc(ettMonHoc)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-trash" title="Xóa" actionListener="#{khoaController.deleteMonHoc(ettMonHoc)}" process="@this" update="tblMonHoc, :form_main:messages" style="margin: 0 8px">
+                                        <p:confirm header="Xác nhận xóa" message="Bạn có muốn xóa không?" icon="pi pi-exclamation-triangle" />
+                                    </p:commandLink>
+                                    <p:commandLink class="pi pi-search" title="Xem" actionListener="#{khoaController.chageStateViewMonHoc(ettMonHoc)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-copy" title="Sao chép" actionListener="#{khoaController.changeStateCopyMonHoc(ettMonHoc)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                </p:column>
+                                <p:column headerText="Mã Môn" sortBy="#{ettMonHoc.maMon}" filterBy="#{ettMonHoc.maMon}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettMonHoc.maMon}" />
+                                </p:column>
+                                <p:column headerText="Tên Môn" sortBy="#{ettMonHoc.tenMon}" filterBy="#{ettMonHoc.tenMon}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettMonHoc.tenMon}" />
+                                </p:column>
+                                <p:column headerText="Số Tín Chỉ" sortBy="#{ettMonHoc.soTinChi}" filterBy="#{ettMonHoc.soTinChi}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettMonHoc.soTinChi}" />
+                                </p:column>
+                                <p:column headerText="Trạng Thái" rendered="false">
+                                    <p:outputLabel value="Hiệu Lực" rendered="#{ettMonHoc.status eq '1'}" />
+                                    <p:outputLabel value="Hết Hiệu Lực" rendered="#{ettMonHoc.status eq '0'}" />
+                                </p:column>
+                            </p:dataTable>
+                            
+                    </p:panel>
+                    <p:panel id="panListRegister" header="DANH SÁCH LỚP">
+                            <p:commandButton value="Thêm" id="addLop" actionListener="#{khoaController.changeStateAddLop()}" process="@this" update=":form_main:opnMain :form_main:messages" 
+                                             />
+                            <p:dataTable id="tblLop" value="#{khoaController.mlstLop}" var="ettLop" rowKey="#{ettLop.id}" style="text-align: center"
+                                         paginator="true" paginatorPosition="bottom" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{startRecord} - {endRecord} của {totalRecords} bản ghi"
+                                         rowsPerPageTemplate="1,5,10,15" selectionMode="single" selection="#{sinhVienController.lopSelected}" >
+                                <p:ajax event="rowSelect" listener="#{sinhVienController.onRowSelectSinhVienByLop}" process="@this" update=":form_main:tblKhoa :form_main:messages :form_main:addSV" />
+                                <p:column headerText="Thao Tác">
+                                    <p:commandLink class="pi pi-pencil" title="Sửa" actionListener="#{khoaController.changeStateEditLop(ettLop)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-trash" title="Xóa" actionListener="#{khoaController.deleteLop(ettLop)}" process="@this" update="tblLop, :form_main:messages" style="margin: 0 8px">
+                                        <p:confirm header="Xác nhận xóa" message="Bạn có muốn xóa không?" icon="pi pi-exclamation-triangle" />
+                                    </p:commandLink>
+                                    <p:commandLink class="pi pi-search" title="Xem" actionListener="#{khoaController.chageStateViewLop(ettLop)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-copy" title="Sao chép" actionListener="#{khoaController.changeStateCopyLop(ettLop)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                </p:column>
+                                <p:column headerText="Mã Lớp" sortBy="#{ettLop.maLop}" filterBy="#{ettLop.maLop}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettLop.maLop}" />
+                                </p:column>
+                                <p:column headerText="Tên Lớp" sortBy="#{ettLop.tenLop}" filterBy="#{ettLop.tenLop}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettLop.tenLop}" />
+                                </p:column>
+                                <p:column headerText="Trạng Thái" rendered="false">
+                                    <p:outputLabel value="Hiệu Lực" rendered="#{ettLop.status eq '1'}" />
+                                    <p:outputLabel value="Hết Hiệu Lực" rendered="#{ettLop.status eq '0'}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                </p:panelGrid>
+                    <p:panel id="panelListRegisterSV" header="DANH SÁCH SINH VIEN">
+                        <p:commandButton value="Thêm" id="addSV" actionListener="#{sinhVienController.changeStateAddSinhVien()}" process="@this" update=":form_main:opnMain" />
+                            <p:dataTable id="tblKhoa" value="#{sinhVienController.lstSinhVien}" var="ettSV" rowKey="#{ettSV.id}" style="text-align: center"
+                                         paginator="true" paginatorPosition="bottom" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{startRecord} - {endRecord} của {totalRecords} bản ghi"
+                                         rowsPerPageTemplate="1,5,10,15"
+                                         >
+                                <p:column headerText="Thao Tác">
+                                    <p:commandLink class="pi pi-pencil" title="Sửa" actionListener="#{sinhVienController.changeStateEditSinhVien(ettSV)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-trash" title="Xóa" actionListener="#{sinhVienController.handDelete(ettSV)}" process="@this" update="tblKhoa, :form_main:messages" style="margin: 0 8px">
+                                        <p:confirm header="Xác nhận xóa" message="Bạn có muốn xóa không?" icon="pi pi-exclamation-triangle" />
+                                    </p:commandLink>
+                                    <p:commandLink class="pi pi-eye" title="Xem" actionListener="#{sinhVienController.changeStateViewSinhVien(ettSV)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-copy" title="Sao chép" actionListener="#{sinhVienController.changeStateCopySinhVien(ettSV)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                </p:column>
+                                <p:column headerText="Mã SV" sortBy="#{ettSV.code}" filterBy="#{ettSV.code}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettSV.code}" />
+                                </p:column>
+                                <p:column headerText="Họ và Tên" sortBy="#{ettSV.name}" filterBy="#{ettSV.name}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettSV.name}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:panel>
+                </p:outputPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

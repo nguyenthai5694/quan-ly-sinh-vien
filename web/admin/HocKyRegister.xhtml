@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/template.xhtml">
+            <ui:define name="content">
+                <p:outputPanel id="opnMain">
+                    <p:outputPanel id="opnListRegister" rendered="#{khoaController.displayMain()}">
+                        <p:panel id="panelListRegister" header="DANH SÁCH HỌC KỲ">
+                            <p:commandButton value="Thêm" actionListener="#{khoaController.changeStateAddHocKy()}" process="@this" update=":form_main:opnMain" />
+                            <p:dataTable id="tblHocKy" value="#{khoaController.mlstHocKy}" var="ettHocKy" rowKey="#{ettHocKy.id}" style="text-align: center" widgetVar="ettHocKyTable"
+                                         paginator="true" paginatorPosition="bottom" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{startRecord} - {endRecord} của {totalRecords} bản ghi"
+                                         rowsPerPageTemplate="1,5,10,15">
+                                <f:facet name="header">
+                                    <p:outputPanel style="margin-left: 820px">
+                                            <h:outputText value="Search" />
+                                            <p:inputText id="globalFilter" onkeyup="PF('ettHocKyTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                        </p:outputPanel>
+                                </f:facet>
+                                <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
+                                <p:column headerText="Thao Tác">
+                                    <p:commandLink class="pi pi-pencil" title="Sửa" actionListener="#{khoaController.changeStateEditHocKy(ettHocKy)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-trash" title="Xóa" actionListener="#{khoaController.deleteHocKy(ettHocKy)}" process="@this" update="tblHocKy, :form_main:messages" style="margin: 0 8px">
+                                        <p:confirm header="Xác nhận xóa" message="Bạn có muốn xóa không?" icon="pi pi-exclamation-triangle" />
+                                    </p:commandLink>
+                                    <p:commandLink class="pi pi-search" title="Xem" actionListener="#{khoaController.changeStateViewHocKy(ettHocKy)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-copy" title="Sao chép" actionListener="#{khoaController.changeStateCopyHocKy(ettHocKy)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                </p:column>
+                                <p:column headerText="Mã Học Kỳ" filterBy="#{ettHocKy.code}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettHocKy.code}" />
+                                </p:column>
+                                <p:column headerText="Start Date" filterBy="#{khoaController.getNgayView(ettHocKy.start_Date)}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{khoaController.getNgayView(ettHocKy.start_Date)}" />
+                                </p:column>
+                                <p:column headerText="End Date" filterBy="#{khoaController.getNgayView(ettHocKy.end_Date)}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{khoaController.getNgayView(ettHocKy.end_Date)}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:outputPanel>
+                    <p:outputPanel id="opnRegister" rendered="#{not khoaController.displayMain()}">
+                        <p:panel id="panelRegister" header="THÔNG TIN HỌC KỲ">
+                            <p:defaultCommand target="cancel" />
+                            <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
+                                <p:outputLabel value="Mã Học Kỳ" for="code" />
+                                <p:inputText value="#{khoaController.hocKy.code}" id="code" placeholder="Mã Học Kỳ" disabled="#{khoaController.isView}"
+                                             required="true" requiredMessage="Mã Học Kỳ bắt buộc nhập" maxlength="10" style="width: 100%;margin-bottom: 10px" />
+                                <p:outputLabel value="Start Date" for="start_Date" />
+                                <p:calendar value="#{khoaController.hocKy.start_Date}" id="start_Date" placeholder="dd/MM/yyyy" disabled="#{khoaController.isView}"
+                                             required="true" requiredMessage="Start Date bắt buộc nhập" style="width: 100%;margin-bottom: 10px" />
+                                <p:outputLabel value="End Date" for="end_Date" />
+                                <p:calendar value="#{khoaController.hocKy.end_Date}" id="end_Date" placeholder="dd/MM/yyyy" disabled="#{khoaController.isView}"
+                                             required="true" requiredMessage="End Date bắt buộc nhập" style="width: 100%;margin-bottom: 10px" />
+                            </p:panelGrid>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <p:commandButton value="Đồng Ý" id="ok" icon="pi pi-apple" actionListener="#{khoaController.handOK()}" rendered="#{not khoaController.isView}" process="@this, :form_main:opnRegister" update=":form_main:messages :form_main:growl :form_main:opnMain" styleClass="btn btn-info" style="margin: 0 10px" />
+                                    <p:commandButton value="Quay Lại" id="cancel" icon="pi pi-question" actionListener="#{khoaController.handCancel()}" process="@this" update=":form_main:opnMain" styleClass="btn btn-info" style="margin: 0 10px" />
+                                </div>
+                            </div>
+                        </p:panel>
+                    </p:outputPanel>
+                </p:outputPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

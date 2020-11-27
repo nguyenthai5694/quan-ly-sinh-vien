@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        Hello from Facelets
+    </h:body>
+</html>
+
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/template.xhtml">
+            <ui:define name="content">
+                <p:outputPanel id="opnMain">
+                    <p:outputPanel id="opnListRegister" rendered="#{sinhVienController_old_2.displayMain()}">
+                        <p:panel id="panelChange" header="Lựa chọn kiểu xem">
+                            <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
+                                <p:outputLabel for="khoa" value="theo khoa: *" />
+                                <p:selectOneMenu id="khoa" value="#{sinhVienController_old_2.khoaSelect}" style="width: 100%;" >
+                                    <!--<p:ajax listener="#{sinhVienController_old_2.onCountryChange}" update="opnMain" />-->
+                                    <f:selectItem itemLabel="Chon khoa" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{sinhVienController_old_2.lstKhoa}" var="ettChuyenNganh" itemLabel="#{ettChuyenNganh.tenKhoa}" itemValue="#{ettChuyenNganh.maKhoa}"  />
+                                </p:selectOneMenu>
+                                <p:outputLabel for="lop" value="Lop: *" />
+                                <p:selectOneMenu id="lop" value="#{sinhVienController_old_2.lopSelect}" style="width: 100%">
+                                    <!--<p:ajax listener="#{sinhVienController_old_2.getListSVofCodeClass}" update="tblKhoa" />-->
+                                    <f:selectItem itemLabel="Chon lop" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{sinhVienController_old_2.lstLop}" var="ettlop" itemLabel="#{ettlop.tenLop}" itemValue="#{ettlop.maLop}" />
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel id="panelListRegister" header="DANH SÁCH SINH VIÊN">
+                            <p:commandButton value="Thêm" actionListener="#{sinhVienController_old_2.changeStateAddSinhVien()}" process="@this" update=":form_main:opnMain" />
+                            <p:dataTable id="tblKhoa" value="#{sinhVienController_old_2.lstSinhVien}" var="ettSV" rowKey="#{ettSV.id}" style="text-align: center"
+                                         paginator="true" paginatorPosition="bottom" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{startRecord} - {endRecord} của {totalRecords} bản ghi"
+                                         rowsPerPageTemplate="1,5,10,15"
+                                         >
+                                <p:column headerText="Thao Tác">
+                                    <p:commandLink class="pi pi-pencil" title="Sửa" actionListener="#{sinhVienController_old_2.changeStateEditSinhVien(ettSV)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-trash" title="Xóa" actionListener="#{sinhVienController_old_2.handDelete(ettSV)}" process="@this" update="tblKhoa, :form_main:messages" style="margin: 0 8px">
+                                        <p:confirm header="Xác nhận xóa" message="Bạn có muốn xóa không?" icon="pi pi-exclamation-triangle" />
+                                    </p:commandLink>
+                                    <p:commandLink class="pi pi-eye" title="Xem" actionListener="#{sinhVienController_old_2.changeStateViewSinhVien(ettSV)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-copy" title="Sao chép" actionListener="#{sinhVienController_old_2.changeStateCopySinhVien(ettSV)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                </p:column>
+                                <p:column headerText="Mã SV" sortBy="#{ettSV.code}" filterBy="#{ettSV.code}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettSV.code}" />
+                                </p:column>
+                                <p:column headerText="Họ và Tên" sortBy="#{ettSV.name}" filterBy="#{ettSV.name}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettSV.name}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:panel>
+                        <p:outputLabel value="33333" rendered="#{not sinhVienController_old_2.displayMain()}" />
+                        <p:outputPanel id="opnRegister" rendered="#{not sinhVienController_old_2.displayMain()}">123
+                            <p:panel id="panelRegister" header="THÔNG TIN CHI TIET">
+                                <p:defaultCommand target="cancel" />
+                                <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
+                                    <p:outputLabel value="Mã sv" for="maKhoa" />
+                                    <p:inputText value="#{sinhVienController_old_2.sv.code}" id="maKhoa" placeholder="Mã Sinh Viên" disabled="#{sinhVienController_old_2.isView}"
+                                                 required="true" requiredMessage="Mã sinh viên bắt buộc nhập" maxlength="10" style="width: 100%;margin-bottom: 10px" />
+
+                                </p:panelGrid>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <p:commandButton value="Đồng Ý" id="ok" icon="pi pi-apple" actionListener="#{sinhVienController_old_2.save()}" rendered="#{not sinhVienController_old_2.isView}" process="@this, :form_main:opnRegister" update=":form_main:messages :form_main:growl :form_main:opnMain" styleClass="btn btn-info" style="margin: 0 10px" />
+                                        <p:commandButton value="Quay Lại" id="cancel" icon="pi pi-question" actionListener="#{sinhVienController_old_2.handCancel()}" process="@this" update=":form_main:opnMain" styleClass="btn btn-info" style="margin: 0 10px" />
+                                    </div>
+                                </div>
+                            </p:panel>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                </p:outputPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

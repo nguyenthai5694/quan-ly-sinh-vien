@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resouce/vendor/fontawesome-free/css/all.min.css" />
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resouce/vendor/datatables/dataTables.bootstrap4.css" />
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resouce/css/sb-admin.css" />
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+        <style>
+            input {width: 100%}
+        </style>
+    </h:head>
+    <h:body id="page-top">
+        <div>
+            <ui:insert name="header">
+                <ui:include src="header.xhtml" />
+            </ui:insert>
+        </div>
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <ul class="sidebar navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="dashboard.xhtml">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>Sinh Viên</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <!--<h6 class="dropdown-header">Danh Sách Sinh Viên</h6>-->
+                        <a href="SinhVienRegister.xhtml" class="dropdown-item" >Danh Sách Sinh Viên</a>
+                        <a href="HocPhiRegister.xhtml" class="dropdown-item" >Quản Lý Học Phí</a>
+                        <a class="dropdown-item" >Quản Lý Nợ Môn</a>
+<!--                        <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header">Other Pages:</h6>
+                        <a class="dropdown-item" href="404.html">404 Page</a>
+                        <a class="dropdown-item" href="blank.html">Blank Page</a>-->
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span>Giảng Viên</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <a href="Register.xhtml" class="dropdown-item" >Danh Sách Giảng Viên</a>
+                        <a class="dropdown-item">Quản Lý Thời Khóa Biểu</a>
+                        <!--<a class="dropdown-item" href="register.html">Quản Lý Nợ Môn</a>-->
+<!--                        <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header">Other Pages:</h6>
+                        <a class="dropdown-item" href="404.html">404 Page</a>
+                        <a class="dropdown-item" href="blank.html">Blank Page</a>-->
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="KhoaRegister.xhtml">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Khoa</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="LopRegister.xhtml">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Lớp</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="MonHocRegister.xhtml">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Môn Học</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="HocKyRegister.xhtml">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Học Kỳ</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="ChuongTrinhHocRegister.xhtml">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Chương Trình Học</span></a>
+                </li>
+            </ul>
+            <h:form id="form_main" style="width: 100%">
+                <p:messages id="messages" showDetail="true" showSummary="false" closable="true" />
+                <p:growl id="growl" showDetail="true" sticky="true" />
+                <ui:insert name="content">
+                    <ui:include src="content.xhtml" />
+                </ui:insert>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Có" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="Không" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                </p:confirmDialog>  
+            </h:form>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright © Your Website 2019</span>
+                </div>
+            </div>
+        </footer>
+
+        
+        <div>
+            <ui:insert name="footer">
+                <ui:include src="footer.xhtml" />
+            </ui:insert>
+        </div>
+    </h:body>
+</html>
+

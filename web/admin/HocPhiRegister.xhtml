@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/template.xhtml">
+            <ui:define name="content">
+                <p:outputPanel id="opnMain">
+                    <p:outputPanel id="opnListRegister" rendered="#{hocPhiController.displayMain()}">
+                        <p:panel id="panelChange" header="Lựa chọn kiểu xem">
+                            <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
+                                <p:outputLabel for="khoa" value="theo khoa: *" />
+                                <p:selectOneMenu id="khoa" value="#{hocPhiController.khoaSelect}" style="width: 100%;" >
+                                    <p:ajax listener="#{hocPhiController.onCountryChange}" update="opnMain" />
+                                    <f:selectItem itemLabel="Chon khoa" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{hocPhiController.lstKhoa}" var="ettChuyenNganh" itemLabel="#{ettChuyenNganh.tenKhoa}" itemValue="#{ettChuyenNganh.maKhoa}"  />
+                                </p:selectOneMenu>
+                                <p:outputLabel for="lop" value="Lop: *" />
+                                <p:selectOneMenu id="lop" value="#{hocPhiController.lopSelect}" style="width: 100%">
+                                    <p:ajax listener="#{hocPhiController.getListSVofCodeClass}" update="tblKhoa" />
+                                    <f:selectItem itemLabel="Chon lop" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{hocPhiController.lstLop}" var="ettlop" itemLabel="#{ettlop.tenLop}" itemValue="#{ettlop.maLop}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel for="hocKy" value="Hoc Ky: *" />
+                                <p:selectOneMenu id="hocKy" value="#{hocPhiController.hocKySelect}" style="width: 100%">
+                                    <p:ajax listener="#{hocPhiController.getListSVofCodeHK}" update="tblKhoa" />
+                                    <f:selectItems value="#{hocPhiController.mlstHocKy}" var="ettHocKy" itemLabel="#{ettHocKy.code}" itemValue="#{ettHocKy.code}" />
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:panel id="panelListRegister" header="DANH SÁCH HỌC PHÍ">
+                            <p:dataTable id="tblKhoa" value="#{hocPhiController.mlstHocPhi}" var="ettHocPhi" rowKey="#{ettHocPhi.id}" style="text-align: center"
+                                         widgetVar="ettHocPhiTable"
+                                         paginator="true" paginatorPosition="bottom" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{startRecord} - {endRecord} của {totalRecords} bản ghi"
+                                         rowsPerPageTemplate="1,5,10,15">
+                                <f:facet name="header">
+                                    <p:outputPanel style="margin-left: 820px">
+                                            <h:outputText value="Search" />
+                                            <p:inputText id="globalFilter" onkeyup="PF('ettHocPhiTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                        </p:outputPanel>
+                                </f:facet>
+                                <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
+                                <p:column headerText="Thao Tác">
+                                    <p:commandLink class="pi pi-dollar" title="Đóng Học Phí" actionListener="#{hocPhiController.dongHocPhi(ettHocPhi)}" rendered="#{ettHocPhi.status eq '0'}" process="@this" update="tblKhoa, :form_main:messages" style="margin: 0 8px">
+                                        <p:confirm header="Xác nhận đóng" message="Bạn có muốn đóng học phí?" icon="pi pi-exclamation-triangle" />
+                                    </p:commandLink>
+                                    <p:commandLink class="pi pi-search" title="Xem" actionListener="#{hocPhiController.changeStateViewHocPhi(ettHocPhi)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                </p:column>
+                                <p:column headerText="Sinh Viên" filterBy="#{ettHocPhi.codeStudent}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettHocPhi.codeStudent}" />
+                                </p:column>
+                                <p:column headerText="Tổng Tín Chỉ" filterBy="#{ettHocPhi.totalTC}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettHocPhi.totalTC}" />
+                                </p:column>
+                                <p:column headerText="Học Phí" filterBy="#{ettHocPhi.totalTien}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettHocPhi.totalTien}" />
+                                </p:column>
+                                <p:column headerText="Tình Trạng Học Phí">
+                                    <p:outputLabel value="Đã Đóng" rendered="#{ettHocPhi.status eq '1'}" />
+                                    <p:outputLabel value="Chưa Đóng" rendered="#{ettHocPhi.status eq '0'}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:outputPanel>
+                    <p:outputPanel id="opnRegister" rendered="#{not hocPhiController.displayMain()}">
+                        <p:panel id="panelRegister" header="THÔNG TIN HỌC PHÍ">
+                            <p:defaultCommand target="cancel" />
+                            <p:panelGrid columns="8" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-1, ui-g-12 ui-md-9 ui-lg-2, ui-g-12 ui-md-3 ui-lg-1,
+                                         ui-g-12 ui-md-9 ui-lg-2, ui-g-12 ui-md-3 ui-lg-1, ui-g-12 ui-md-9 ui-lg-2, ui-g-12 ui-md-3 ui-lg-1, ui-g-12 ui-md-9 ui-lg-2"
+                                         styleClass="ui-panelgrid-blank">
+                                <p:outputLabel value="Tên: " for="nameSV" />
+                                <p:outputLabel value=" #{hocPhiController.sinhVien.name}" id="nameSV" style="text-align: left;margin-left: 10px;" />
+                                
+                                <p:outputLabel value="Khoa: " for="khoaSV" />
+                                <p:outputLabel value=" #{hocPhiController.sinhVien.code_khoa}" id="khoaSV"  style="text-align: left;margin-left: 10px;"/>
+                                
+                                <p:outputLabel value="Lớp: " for="lopSV" />
+                                <p:outputLabel value=" #{hocPhiController.sinhVien.code_class}" id="lopSV"  style="text-align: left;margin-left: 10px;"/>
+                                
+                                <p:outputLabel for="hocKy2" value="Học kỳ: *" />
+                                <p:selectOneMenu id="hocKy2" value="#{hocPhiController.hocKySelect}" style="width: 100%">
+                                    <p:ajax listener="#{hocPhiController.getListSVofCodeHK}" update="tblKhoa" />
+                                    <f:selectItems value="#{hocPhiController.mlstHocKy}" var="ettHocKy" itemLabel="#{ettHocKy.code}" itemValue="#{ettHocKy.code}" />
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                            <p:dataTable id="tblHocPhi" value="#{hocPhiController.listChiTietHocPhi}" var="ett" rowKey="#{ett.codeSV}" style="text-align: center">
+                                <p:column headerText="Tên Môn Học">
+                                    <p:outputLabel value="#{ett.nameSubject}" />
+                                </p:column>
+                                <p:column headerText="Mã Môn Học">
+                                    <p:outputLabel value="#{ett.codeSubject}" />
+                                </p:column>
+                                <p:column headerText="Số Tín Chỉ">
+                                    <p:outputLabel value="#{ett.tinChi}" />
+                                </p:column>
+                                <p:column headerText="Học phí từng môn học">
+                                    <p:outputLabel value="#{ett.hocPhi}" />
+                                </p:column>
+                                <p:columnGroup type="footer">
+                                    <p:row>
+                                        <p:column colspan="3" style="text-align:right" footerText="Tổng học phí:" />
+                                        <p:column footerText="#{hocPhiController.tongHocPhi}" />
+                                    </p:row>
+                                </p:columnGroup>
+                            </p:dataTable>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <p:commandButton value="Quay Lại" id="cancel" icon="pi pi-question" actionListener="#{hocPhiController.handCancel()}" process="@this" update=":form_main:opnMain" styleClass="btn btn-info" style="margin-top: 10px" />
+                                </div>
+                            </div>
+                        </p:panel>
+                    </p:outputPanel>
+                </p:outputPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

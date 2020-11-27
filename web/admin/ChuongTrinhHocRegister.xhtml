@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/template.xhtml">
+            <ui:define name="content">
+                <p:outputPanel id="opnMain">
+                    <p:outputPanel id="opnListRegister" rendered="#{khoaController.displayMain()}">
+                        <p:panel id="panelListRegister" header="DANH SÁCH CHƯƠNG TRÌNH HỌC">
+                            <p:commandButton value="Thêm" actionListener="#{khoaController.changeStateAddChuongTrinhHoc()}" process="@this" update=":form_main:opnMain" />
+                            <p:dataTable id="tblCTHoc" value="#{khoaController.mlstChuongTrinhHoc}" var="ettCTHoc" rowKey="#{ettCTHoc.id}" style="text-align: center" widgetVar="ettCTHocTable"
+                                         paginator="true" paginatorPosition="bottom" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         currentPageReportTemplate="{startRecord} - {endRecord} của {totalRecords} bản ghi"
+                                         rowsPerPageTemplate="1,5,10,15">
+                                <f:facet name="header">
+                                    <p:outputPanel style="margin-left: 820px">
+                                            <h:outputText value="Search" />
+                                            <p:inputText id="globalFilter" onkeyup="PF('ettCTHocTable').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                        </p:outputPanel>
+                                </f:facet>
+                                <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
+                                <p:column headerText="Thao Tác">
+                                    <p:commandLink class="pi pi-pencil" title="Sửa" actionListener="#{khoaController.changeStateEditChuongTrinhHoc(ettCTHoc)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-trash" title="Xóa" actionListener="#{khoaController.deleteChuongTrinhHoc(ettCTHoc)}" process="@this" update="tblCTHoc, :form_main:messages" style="margin: 0 8px">
+                                        <p:confirm header="Xác nhận xóa" message="Bạn có muốn xóa không?" icon="pi pi-exclamation-triangle" />
+                                    </p:commandLink>
+                                    <p:commandLink class="pi pi-search" title="Xem" actionListener="#{khoaController.changeStateViewChuongTrinhHoc(ettCTHoc)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-copy" title="Sao chép" actionListener="#{khoaController.changeStateCopyChuongTrinhHoc(ettCTHoc)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                </p:column>
+                                <p:column headerText="Khoa" filterBy="#{ettCTHoc.codeKhoa}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettCTHoc.codeKhoa}" />
+                                </p:column>
+                                <p:column headerText="Học Kỳ" filterBy="#{ettCTHoc.codeHK}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettCTHoc.codeHK}" />
+                                </p:column>
+                                <p:column headerText="List Môn" filterBy="#{khoaController.ArrayMonHoc(ettCTHoc)}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{khoaController.ArrayMonHoc(ettCTHoc)}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:outputPanel>
+                    <p:outputPanel id="opnRegister" rendered="#{not khoaController.displayMain()}">
+                        <p:panel id="panelRegister" header="THÔNG TIN CHƯƠNG TRÌNH HỌC">
+                            <p:defaultCommand target="cancel" />
+                            <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
+                                <p:outputLabel value="Khoa" for="codeKhoa" />
+                                <p:selectOneMenu value="#{khoaController.chuongTrinhHoc.codeKhoa}" id="codeKhoa" disabled="#{phongController.isView}"
+                                                 style="width: 100%;margin-bottom: 10px">
+                                    <f:selectItems value="#{khoaController.mlstKhoa}" var="lsKhoa"
+                                                   itemLabel="#{lsKhoa.tenKhoa}" itemValue="#{lsKhoa.maKhoa}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Học Kỳ" for="codeHK" />
+                                <p:selectOneMenu value="#{khoaController.chuongTrinhHoc.codeHK}" id="codeHK" disabled="#{phongController.isView}"
+                                                 style="width: 100%;margin-bottom: 10px">
+                                    <f:selectItems value="#{khoaController.mlstHocKy}" var="lsHK"
+                                                   itemLabel="#{lsHK.code}" itemValue="#{lsHK.code}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel for="codeSubjects" value="List Môn" />
+                                <p:selectCheckboxMenu id="codeSubjects" value="#{khoaController.chuongTrinhHoc.codeSubjects}" label="List Môn" multiple="true"
+                                                      filter="true" filterMatchMode="startsWith" panelStyle="width:300px" style="width: 100%;margin-bottom: 10px">
+                                    <f:selectItems value="#{khoaController.mlstMonHoc}" var="lsMon" itemLabel="#{lsMon.tenMon}"
+                                                   itemValue="#{lsMon.maMon}"/>
+                                </p:selectCheckboxMenu>
+                            </p:panelGrid>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <p:commandButton value="Đồng Ý" id="ok" icon="pi pi-apple" actionListener="#{khoaController.handOK()}" rendered="#{not khoaController.isView}" process="@this, :form_main:opnRegister" update=":form_main:messages :form_main:growl :form_main:opnMain" styleClass="btn btn-info" style="margin: 0 10px" />
+                                    <p:commandButton value="Quay Lại" id="cancel" icon="pi pi-question" actionListener="#{khoaController.handCancel()}" process="@this" update=":form_main:opnMain" styleClass="btn btn-info" style="margin: 0 10px" />
+                                </div>
+                            </div>
+                        </p:panel>
+                    </p:outputPanel>
+                </p:outputPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
