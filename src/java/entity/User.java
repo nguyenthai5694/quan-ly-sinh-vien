@@ -32,6 +32,7 @@ public class User implements Serializable {
     private String chgWho;
     private Date chgDate;
     private String status;
+    private int dec;
 
     public User() {
     }
@@ -178,6 +179,14 @@ public class User implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getDec() {
+        return dec;
+    }
+
+    public void setDec(int dec) {
+        this.dec = dec;
     }
     
 

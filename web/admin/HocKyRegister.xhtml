@@ -55,10 +55,10 @@
                                              required="true" requiredMessage="Mã Học Kỳ bắt buộc nhập" maxlength="10" style="width: 100%;margin-bottom: 10px" />
                                 <p:outputLabel value="Start Date" for="start_Date" />
                                 <p:calendar value="#{khoaController.hocKy.start_Date}" id="start_Date" placeholder="dd/MM/yyyy" disabled="#{khoaController.isView}"
-                                             required="true" requiredMessage="Start Date bắt buộc nhập" style="width: 100%;margin-bottom: 10px" />
+                                             required="true" requiredMessage="Start Date bắt buộc nhập" style="width: 100%;margin-bottom: 10px" navigator="true" pattern="dd/MM/yyyy"/>
                                 <p:outputLabel value="End Date" for="end_Date" />
                                 <p:calendar value="#{khoaController.hocKy.end_Date}" id="end_Date" placeholder="dd/MM/yyyy" disabled="#{khoaController.isView}"
-                                             required="true" requiredMessage="End Date bắt buộc nhập" style="width: 100%;margin-bottom: 10px" />
+                                             required="true" requiredMessage="End Date bắt buộc nhập" style="width: 100%;margin-bottom: 10px" navigator="true" pattern="dd/MM/yyyy"/>
                             </p:panelGrid>
                             <div class="row">
                                 <div class="col-12 text-center">

@@ -12,38 +12,26 @@
         <ui:composition template="../template/template.xhtml">
             <ui:define name="content">
                 <p:outputPanel id="opnMain">
-                    <p:outputPanel id="opnListRegister" rendered="#{sinhVienController.displayMain()}">
-                        <p:panel id="panelChange" header="Lựa chọn kiểu xem">
+                    <p:outputPanel id="opnListRegister" rendered="#{diemDanhController.displayMain()}">
+                        <p:panel id="panelChange" header="Lựa chọn">
                             <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
-                                <p:outputLabel for="monHoc" value="Môn Học: *" />
-                                <p:selectOneMenu id="monHoc" value="#{sinhVienController.monHocSelect}" style="width: 100%;" >
-                                    <p:ajax listener="#{sinhVienController.onMonHoc()}" update="opnMain" />
+                                <p:outputLabel for="monHoc" value="Môn Học: " />
+                                <p:selectOneMenu id="monHoc" value="#{diemDanhController.monHocSelect}" style="width: 100%;" required="true" requiredMessage="Bắt buộc chọn môn học">
                                     <f:selectItem itemLabel="Chọn Môn" itemValue="" noSelectionOption="true" />
-                                    <f:selectItems value="#{sinhVienController.lstMonHoc}" var="ettChuyenNganh" itemLabel="#{ettChuyenNganh.tenMon}" itemValue="#{ettChuyenNganh.maKhoa}"  />
+                                    <f:selectItems value="#{diemDanhController.lstMonHoc}" var="ettChuyenNganh" itemLabel="#{ettChuyenNganh.tenMon}" itemValue="#{ettChuyenNganh.maMon}"  />
                                 </p:selectOneMenu>
-                                <p:outputLabel for="lop" value="Lop: *" />
-                                <p:selectOneMenu id="lop" value="#{sinhVienController.lopSelect}" style="width: 100%">
-                                    <p:ajax listener="#{sinhVienController.getListSVofCodeClass}" update="tblKhoa" />
-                                    <f:selectItem itemLabel="Chon lop" itemValue="" noSelectionOption="true" />
-                                    <f:selectItems value="#{sinhVienController.lstLop}" var="ettlop" itemLabel="#{ettlop.tenLop}" itemValue="#{ettlop.maLop}" />
+                                <p:outputLabel for="lop" value="Lớp: " />
+                                <p:selectOneMenu id="lop" value="#{diemDanhController.lopSelect}" style="width: 100%" required="true" requiredMessage="Bắt buộc chọn lớp">
+                                    <p:ajax listener="#{diemDanhController.getListSVofCodeClass}" update="tblKhoa" />
+                                    <f:selectItem itemLabel="Chọn lớp" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{diemDanhController.lstLop}" var="ettlop" itemLabel="#{ettlop.tenLop}" itemValue="#{ettlop.maLop}" />
                                 </p:selectOneMenu>
                             </p:panelGrid>
                         </p:panel>
-                        <p:panel id="panelListRegister" header="DANH SÁCH SINH VIEN">
-                            <p:commandButton value="Thêm" actionListener="#{sinhVienController.changeStateAddSinhVien()}" process="@this" update=":form_main:opnMain" />
-                            <p:dataTable id="tblKhoa" value="#{sinhVienController.lstSinhVien}" var="ettSV" rowKey="#{ettSV.id}" style="text-align: center"
-                                         
-                                         >
-                                <!--<p:column headerText="Thao Tác">
-                                    <p:commandLink class="pi pi-pencil" title="Sửa" actionListener="#{sinhVienController.changeStateEditSinhVien(ettSV)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
-                                    <p:commandLink class="pi pi-trash" title="Xóa" actionListener="#{sinhVienController.handDelete(ettSV)}" process="@this" update="tblKhoa, :form_main:messages" style="margin: 0 8px">
-                                        <p:confirm header="Xác nhận xóa" message="Bạn có muốn xóa không?" icon="pi pi-exclamation-triangle" />
-                                    </p:commandLink>
-                                    <p:commandLink class="pi pi-eye" title="Xem" actionListener="#{sinhVienController.changeStateViewSinhVien(ettSV)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
-                                    <p:commandLink class="pi pi-copy" title="Sao chép" actionListener="#{sinhVienController.changeStateCopySinhVien(ettSV)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
-                                </p:column>-->
+                        <p:panel id="panelListRegister" header="DANH SÁCH SINH VIÊN">
+                            <p:dataTable id="tblKhoa" value="#{diemDanhController.lstSinhVien}" var="ettSV" rowKey="#{ettSV.id}" style="text-align: center" emptyMessage="Hãy chọn lớp">
                                 <p:column headerText="STT">
-                                    <p:outputLabel value="#{ettSV.id}" />
+                                    <p:outputLabel value="#{ettSV.stt}" />
                                 </p:column>
                                 <p:column headerText="Mã SV"  >
                                     <p:outputLabel value="#{ettSV.code}" />
@@ -52,91 +40,31 @@
                                     <p:outputLabel value="#{ettSV.name}" />
                                 </p:column>
                                 <p:column headerText="Có Mặt">
-                                        <p:selectManyCheckbox id="value1" value="#{checkboxView.selectedConsoles}">
-                                            <f:selectItem itemLabel="" itemValue="Xbox One"  />
-                                        </p:selectManyCheckbox>
+                                    <p:selectOneRadio id="customRadio" value="#{ettSV.diemDanh}" layout="custom" >
+                                        <f:selectItem itemLabel="0" itemValue="0" />
+                                        <f:selectItem itemLabel="1" itemValue="1" />
+                                        <f:selectItem itemLabel="2" itemValue="2" />
+                                    </p:selectOneRadio>
+                                    <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
                                 </p:column>
                                 <p:column headerText="Vắng">
-                                        <p:selectManyCheckbox id="value2" value="#{checkboxView.selectedConsoles}">
-                                            <f:selectItem itemLabel="" itemValue="Xbox One"  />
-                                        </p:selectManyCheckbox>
+                                    <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
                                 </p:column>                                
                                 <p:column headerText="Vắng Có phép">
-                                        <p:selectManyCheckbox id="value3" value="#{checkboxView.selectedConsoles}">
-                                            <f:selectItem itemLabel="" itemValue="Xbox One"  />
-                                        </p:selectManyCheckbox>
+                                   <p:radioButton id="opt3" for="customRadio" itemIndex="2" />
                                 </p:column>
                                 <p:column headerText="Ghi Chú" >
-                                    <p:inputText title="Ghi Chú"/>
+                                    <p:inputText value="#{ettSV.decscriptionDiemDanh}" title="Ghi Chú"/>
                                 </p:column>
-
                             </p:dataTable>
-                        </p:panel>
-                    </p:outputPanel>
-                    <p:outputPanel id="opnRegister" rendered="#{not sinhVienController.displayMain()}">
-                        <p:panel id="panelRegister" header="THÔNG TIN CHI TIET">
-                            <p:defaultCommand target="cancel" />
-                            <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
-                                <p:outputLabel value="Mã sv" for="maKhoa" />
-                                <p:inputText value="#{sinhVienController.sv.code}" id="maKhoa" placeholder="Mã Sinh Viên" disabled="#{sinhVienController.isView}"
-                                             required="true" requiredMessage="Mã sinh viên bắt buộc nhập" maxlength="10" style="width: 100%;margin-bottom: 10px" />
-                                <p:outputLabel value="Tên SV" for="tenKhoa" />
-                                <p:inputText value="#{sinhVienController.sv.name}" id="tenKhoa" placeholder="Tên Sinh VIên" disabled="#{sinhVienController.isView}"
-                                             required="true" requiredMessage="Tên sinh viên bắt buộc nhập" maxlength="20" style="width: 100%;margin-bottom: 10px" />
-                                
-                                <p:outputLabel value="Ngày sinh" for="birtDay"  />
-                                <p:calendar id="birtDay" value="#{sinhVienController.sv.birthday}"  disabled="#{sinhVienController.isView}"
-                                            rendered="true"
-                                            navigator="true" pattern="dd/MM/yyyy" />
-                                <p:outputLabel value="Số điện thoại" for="phoneNumber" />
-                                <p:inputText value="#{sinhVienController.sv.phone_number}" id="phoneNumber" disabled="#{sinhVienController.isView}" 
-                                             maxlength="10" >
-                                    <p:keyFilter regEx="/[\d]/"  preventPaste="false"/>  
-                                </p:inputText>
-                                
-                                <p:outputLabel value="Địa Chỉ" for="diaChi"/>
-                                <p:inputText value="#{sinhVienController.sv.address}" id="diaChi" placeholder="Địa Chỉ" style="width: 100%;margin-bottom: 10px" disabled="#{sinhVienController.isView}"
-                                             required="true" requiredMessage="Bat buoc nhap" maxlength="100" />
-                                <p:outputLabel value="Chứng Minh Nhân Dân" for="CMND" />
-                                <p:inputText value="#{sinhVienController.sv.id_no}" id="CMND" placeholder="Chứng Minh Nhân Dân" style="width: 100%;margin-bottom: 10px"
-                                            disabled="#{sinhVienController.isView}" required="true" requiredMessage="CMND Bat Buoc" maxlength="20" />
-                                
-                                <p:outputLabel value="Ngày Cấp" for="ngayCapCMND" />
-                                <p:calendar value="#{sinhVienController.sv.id_issue_date}" id="ngayCapCMND" placeholder="dd/mm/yyyy" required="true" requiredMessage="Ngay cap bat buoc nhap"
-                                            style="width: 100%;margin-bottom: 10px" disabled="#{sinhVienController.isView}" />
-                                <p:outputLabel value="Nơi Cấp" for="noiCapCMND" />
-                                <p:inputText value="#{sinhVienController.sv.id_issue_place}" id="noiCapCMND" placeholder="Nơi Cấp" style="width: 100%;margin-bottom: 10px"
-                                            disabled="#{sinhVienController.isView}" required="true" requiredMessage="Ngay cap bat buoc nhap" maxlength="100" />
-                               <p:outputLabel for="theoKhoa" value="khoa:" />
-                               <p:selectOneMenu id="theoKhoa" value="#{sinhVienController.sv.code_khoa}" disabled="#{sinhVienController.isView}" style="width: 100%" required="true" requiredMessage="khoa bắt buộc nhập" >
-                                   <p:ajax listener="#{sinhVienController.onCountryChange}" update="opnRegister" /> 
-                                   <f:selectItem itemLabel="Chon khoa" itemValue="" />
-                                    <f:selectItems value="#{sinhVienController.lstKhoa}" var="ettChuyenNganh" itemLabel="#{ettChuyenNganh.tenKhoa}" itemValue="#{ettChuyenNganh.maKhoa}" />
-                                </p:selectOneMenu>
-                                
-                                <p:outputLabel for="theoLop" value="Lop:" />
-                                <p:selectOneMenu id="theoLop" value="#{sinhVienController.sv.code_class}" disabled="#{sinhVienController.isView}" required="true" requiredMessage="lớp bắt buộc nhập" style="width: 100%" >
-                                    <f:selectItem itemLabel="Chon lop" itemValue="" />
-                                    <f:selectItems value="#{sinhVienController.lstLopTheoKhoa}" var="ettlop" itemLabel="#{ettlop.tenLop}" itemValue="#{ettlop.maLop}" />
-                                </p:selectOneMenu>
-                                <p:outputLabel value="Nguyên Quán" for="nguyenQuan" />
-                                <p:inputText value="#{sinhVienController.sv.place}" id="nguyenQuan" placeholder="Quê Quán"  style="width: 100%;margin-bottom: 10px" 
-                                             required="true" requiredMessage="Quê Quán Bat buoc nhap" maxlength="50" disabled="#{sinhVienController.isView}"/>
-                                <p:outputLabel value="Giới tính" for="gender" />
-                                <p:selectOneRadio id="gender" value="#{sinhVienController.sv.gender}" disabled="#{sinhVienController.isView}">
-                                    <f:selectItem itemLabel="Nam" itemValue="0" />
-                                    <f:selectItem itemLabel="Nữ" itemValue="1" />
-                                </p:selectOneRadio>
-                               
-                                
-                            </p:panelGrid>
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <p:commandButton value="Đồng Ý" id="ok" icon="pi pi-apple" actionListener="#{sinhVienController.save()}" rendered="#{not sinhVienController.isView}" process="@this, :form_main:opnRegister" update=":form_main:messages :form_main:growl :form_main:opnMain" styleClass="btn btn-info" style="margin: 0 10px" />
-                                    <p:commandButton value="Quay Lại" id="cancel" icon="pi pi-question" actionListener="#{sinhVienController.handCancel()}" process="@this" update=":form_main:opnMain" styleClass="btn btn-info" style="margin: 0 10px" />
+                                    <p:commandButton value="Đồng Ý" id="ok1" actionListener="#{diemDanhController.handOK()}" process="@this, :form_main:opnMain" 
+                                                     update=":form_main:messages :form_main:opnMain" styleClass="btn btn-info" style="margin: 10px 10px" />
                                 </div>
                             </div>
                         </p:panel>
+                        
                     </p:outputPanel>
                 </p:outputPanel>
             </ui:define>

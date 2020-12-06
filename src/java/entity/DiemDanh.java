@@ -16,6 +16,7 @@ public class DiemDanh {
     private String codeSubjects;
     private String codeClass;
     private String codeStudent;
+    private String decscription;
     private Date date;
     private int status;
     private String chgWho;
@@ -86,6 +87,14 @@ public class DiemDanh {
 
     public void setChgDate(Date chgDate) {
         this.chgDate = chgDate;
+    }
+
+    public String getDecscription() {
+        return decscription;
+    }
+
+    public void setDecscription(String decscription) {
+        this.decscription = decscription;
     }
     
     

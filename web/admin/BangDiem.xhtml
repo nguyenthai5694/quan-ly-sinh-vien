@@ -15,27 +15,27 @@
                     <p:outputPanel id="opnListRegister" rendered="#{hocPhiController.displayMain()}">
                         <p:panel id="panelChange" header="Lựa chọn kiểu xem">
                             <p:panelGrid columns="4" layout="grid" columnClasses="ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4, ui-g-12 ui-md-3 ui-lg-2, ui-g-12 ui-md-9 ui-lg-4" styleClass="ui-panelgrid-blank">
-                                <p:outputLabel for="khoa" value="theo khoa: *" />
-                                <p:selectOneMenu id="khoa" value="#{hocPhiController.khoaSelect}" style="width: 100%;" >
-                                    <p:ajax listener="#{hocPhiController.onCountryChange}" update="opnMain" />
+                                <p:outputLabel for="khoa" value="Khoa: *" />
+                                <p:selectOneMenu id="khoa" value="#{themDiemController.khoaSelect}" style="width: 100%;" >
+                                    <p:ajax listener="#{themDiemController.onCountryChange}" update="opnMain" />
                                     <f:selectItem itemLabel="Chon khoa" itemValue="" noSelectionOption="true" />
-                                    <f:selectItems value="#{hocPhiController.lstKhoa}" var="ettChuyenNganh" itemLabel="#{ettChuyenNganh.tenKhoa}" itemValue="#{ettChuyenNganh.maKhoa}"  />
+                                    <f:selectItems value="#{themDiemController.lstKhoa}" var="ettChuyenNganh" itemLabel="#{ettChuyenNganh.tenKhoa}" itemValue="#{ettChuyenNganh.maKhoa}" />
                                 </p:selectOneMenu>
-                                <p:outputLabel for="lop" value="Lop: *" />
-                                <p:selectOneMenu id="lop" value="#{hocPhiController.lopSelect}" style="width: 100%">
+                                <p:outputLabel for="lop" value="Lớp: *" />
+                                <p:selectOneMenu id="lop" value="#{themDiemController.lopSelect}" style="width: 100%">
                                     <p:ajax listener="#{hocPhiController.getListSVofCodeClass}" update="tblKhoa" />
-                                    <f:selectItem itemLabel="Chon lop" itemValue="" noSelectionOption="true" />
-                                    <f:selectItems value="#{hocPhiController.lstLop}" var="ettlop" itemLabel="#{ettlop.tenLop}" itemValue="#{ettlop.maLop}" />
+                                    <f:selectItem itemLabel="Chọn lớp" itemValue="" noSelectionOption="true" />
+                                    <f:selectItems value="#{themDiemController.lstLop}" var="ettlop" itemLabel="#{ettlop.tenLop}" itemValue="#{ettlop.maLop}" />
                                 </p:selectOneMenu>
-                                <p:outputLabel for="hocKy" value="Hoc Ky: *" />
-                                <p:selectOneMenu id="hocKy" value="#{hocPhiController.hocKySelect}" style="width: 100%">
-                                    <p:ajax listener="#{hocPhiController.getListSVofCodeHK}" update="tblKhoa" />
-                                    <f:selectItems value="#{hocPhiController.mlstHocKy}" var="ettHocKy" itemLabel="#{ettHocKy.code}" itemValue="#{ettHocKy.code}" />
+                                <p:outputLabel for="hocKy" value="Học Kỳ: *" />
+                                <p:selectOneMenu id="hocKy" value="#{themDiemController.hocKySelect}" style="width: 100%">
+                                    <p:ajax listener="#{themDiemController.getListSVofCodeClass}" update="tblKhoa" />
+                                    <f:selectItems value="#{themDiemController.mlstHocKy}" var="ettHocKy" itemLabel="#{ettHocKy.code}" itemValue="#{ettHocKy.code}" />
                                 </p:selectOneMenu>
                             </p:panelGrid>
                         </p:panel>
                         <p:panel id="panelListRegister" header="DANH SÁCH HỌC PHÍ">
-                            <p:dataTable id="tblKhoa" value="#{hocPhiController.mlstHocPhi}" var="ettHocPhi" rowKey="#{ettHocPhi.id}" style="text-align: center"
+                            <p:dataTable id="tblKhoa" value="#{themDiemController.lstSinhVien2}" var="ettHocPhi" rowKey="#{ettHocPhi.id}" style="text-align: center"
                                          widgetVar="ettHocPhiTable"
                                          paginator="true" paginatorPosition="bottom" rows="10" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          currentPageReportTemplate="{startRecord} - {endRecord} của {totalRecords} bản ghi"
@@ -48,23 +48,21 @@
                                 </f:facet>
                                 <p:column selectionMode="multiple" style="width:50px;text-align:center"/>
                                 <p:column headerText="Thao Tác">
-                                    <p:commandLink class="pi pi-dollar" title="Đóng Học Phí" actionListener="#{hocPhiController.dongHocPhi(ettHocPhi)}" rendered="#{ettHocPhi.status eq '0'}" process="@this" update="tblKhoa, :form_main:messages" style="margin: 0 8px">
-                                        <p:confirm header="Xác nhận đóng" message="Bạn có muốn đóng học phí?" icon="pi pi-exclamation-triangle" />
-                                    </p:commandLink>
-                                    <p:commandLink class="pi pi-search" title="Xem" actionListener="#{hocPhiController.changeStateViewHocPhi(ettHocPhi)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
+                                    <p:commandLink class="pi pi-search" title="Xem chi tiết" actionListener="#{hocPhiController.changeStateViewHocPhi(ettHocPhi)}" process="@this" update=":form_main:opnMain" style="margin: 0 8px" />
                                 </p:column>
-                                <p:column headerText="Sinh Viên" filterBy="#{ettHocPhi.codeStudent}" filterMatchMode="contains">
-                                    <p:outputLabel value="#{ettHocPhi.codeStudent}" />
+                                <p:column headerText="Mã Sinh Viên" filterBy="#{ettHocPhi.code}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettHocPhi.code}" />
                                 </p:column>
-                                <p:column headerText="Tổng Tín Chỉ" filterBy="#{ettHocPhi.totalTC}" filterMatchMode="contains">
-                                    <p:outputLabel value="#{ettHocPhi.totalTC}" />
+                                <p:column headerText="Sinh Viên" filterBy="#{ettHocPhi.name}" filterMatchMode="contains">
+                                    <p:outputLabel value="#{ettHocPhi.name}" />
                                 </p:column>
-                                <p:column headerText="Học Phí" filterBy="#{ettHocPhi.totalTien}" filterMatchMode="contains">
-                                    <p:outputLabel value="#{ettHocPhi.totalTien}" />
+                                <p:column headerText="Tổng Tín Chỉ">
+                                    <p:outputLabel value="#{themDiemController.getTotalTC(ettHocPhi.code)}" />
                                 </p:column>
-                                <p:column headerText="Tình Trạng Học Phí">
-                                    <p:outputLabel value="Đã Đóng" rendered="#{ettHocPhi.status eq '1'}" />
-                                    <p:outputLabel value="Chưa Đóng" rendered="#{ettHocPhi.status eq '0'}" />
+                                <p:column headerText="Điểm Trung Bình(Hệ số 10)" >
+                                    <p:outputLabel value="#{themDiemController.getTongDiemTBMH(ettHocPhi.code)}" />
+                                </p:column>
+                                <p:column headerText="Điểm Trung Bình(Hệ số 4)">
                                 </p:column>
                             </p:dataTable>
                         </p:panel>

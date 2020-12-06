@@ -5,7 +5,7 @@
  */
 package model;
 
-import entity.GiangVien;
+import entity.GiangVien_old;
 import entity.Lop;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -19,15 +19,15 @@ import util.DateUtils;
  * @author ADMIN
  */
 public class GiangVienModel_old extends ConnectionUtil{
-    public List<GiangVien> getListGiangVien() throws Exception{
-        List<GiangVien> lstGiangVien = new ArrayList<>();
+    public List<GiangVien_old> getListGiangVien() throws Exception{
+        List<GiangVien_old> lstGiangVien = new ArrayList<>();
         String strSQL = "select * from teacher order by code_khoa";
         try {
             open();
             mStmt = mConnection.prepareStatement(strSQL);
             mRs = mStmt.executeQuery();
             while(mRs.next()){
-                GiangVien gv = new GiangVien();
+                GiangVien_old gv = new GiangVien_old();
                 gv.setId(mRs.getLong("id"));
                 gv.setMaGv(mRs.getString("code"));
                 gv.setTenGv(mRs.getString("name"));
@@ -53,7 +53,7 @@ public class GiangVienModel_old extends ConnectionUtil{
         return lstGiangVien;
     }
     
-    public void add(GiangVien giangVien) throws Exception{
+    public void add(GiangVien_old giangVien) throws Exception{
         String strSQL = "insert into teacher\n" +
                         "(code,\n" +
                         "name,\n" +
@@ -89,7 +89,7 @@ public class GiangVienModel_old extends ConnectionUtil{
             close();
         }
     }
-    public void updateGiangVien(GiangVien giangVien)throws Exception{
+    public void updateGiangVien(GiangVien_old giangVien)throws Exception{
         String strSQL = "update teacher \n" +
                         "set code = ?,\n" +
                         "name = ?,\n" +
@@ -128,7 +128,7 @@ public class GiangVienModel_old extends ConnectionUtil{
             close();
         }
     }
-    public void delete(GiangVien giangVien) throws Exception{
+    public void delete(GiangVien_old giangVien) throws Exception{
         String strSQL = "update teacher\n" +
                         "set status = 0\n" +
                         "where id= ?;";

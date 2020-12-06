@@ -98,6 +98,29 @@ public class KhoaModel extends ConnectionUtil {
         }
         return lstMonHoc;
     }
+    
+    public List<MonHoc> getListMonHocTheoGiangVien(String code) throws Exception {
+        List<MonHoc> lstMonHoc = new ArrayList<>();
+        String strSQL = "select * from list_subjects inner join subjects on list_subjects.code_subject = subjects.code where list_subjects.code_teacher = ?";
+        try {
+            open();
+            mStmt = mConnection.prepareStatement(strSQL);
+            mStmt.setString(1, code);
+            mRs = mStmt.executeQuery();
+            while (mRs.next()) {
+                MonHoc monHoc = new MonHoc();
+                monHoc.setMaMon(mRs.getString("code_subject"));
+                monHoc.setTenMon(mRs.getString("subjects.name"));
+                lstMonHoc.add(monHoc);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            close();
+        }
+        return lstMonHoc;
+    }
+    
     public ChiTietHocPhi getChiTietHocPhi(String codeSubject, String codeSV) throws Exception{
         ChiTietHocPhi chiTietHocPhi = new ChiTietHocPhi();
         String strSQL = "select * from subjects where code = ?";

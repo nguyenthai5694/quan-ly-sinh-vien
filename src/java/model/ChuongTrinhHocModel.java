@@ -5,10 +5,14 @@
  */
 package model;
 
+import controller.LoginController;
 import entity.ChiTietHocPhi;
 import entity.ChuongTrinhHoc;
 import entity.HocPhi;
+import entity.MonHoc;
 import entity.SinhVien;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,8 +124,28 @@ public class ChuongTrinhHocModel extends ConnectionUtil {
                     chuongTrinhHoc.setId(mRs.getLong(1));
                 }
                 addHocPhi(chuongTrinhHoc);
+                addDiem(chuongTrinhHoc,codeSubjects);
             }
 
+        } finally {
+            close();
+        }
+    }
+    public void addDiem(ChuongTrinhHoc cth, String codeSubject) throws Exception {
+        SinhVienModel sinhVienModel = new SinhVienModel();
+        List<SinhVien> listSV = new ArrayList<>(sinhVienModel.getListSinhVienTheoKhoa(cth.getCodeKhoa()));
+        try {
+            for (SinhVien listSinhVien1 : listSV) {
+                    String strSQL = "INSERT INTO bang_diem (code_hk, code_student, code_subject, chg_who, chg_date) VALUES (?, ?, ?, ?, sysdate());";
+                    open();
+                    mStmt = mConnection.prepareStatement(strSQL, Statement.RETURN_GENERATED_KEYS);
+                    mStmt.setString(3, codeSubject);
+                    mStmt.setString(1, cth.getCodeHK());
+                    mStmt.setString(2, listSinhVien1.getCode());
+                    mStmt.setString(4, LoginController.getUserLogin());
+                    mStmt.executeUpdate();
+                    mRs = mStmt.getGeneratedKeys();
+            }
         } finally {
             close();
         }

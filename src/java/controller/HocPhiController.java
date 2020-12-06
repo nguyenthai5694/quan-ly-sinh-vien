@@ -43,7 +43,6 @@ public class HocPhiController extends ActionUtil{
     private HocPhi hocPhi;
     private List<HocPhi> mlstHocPhi;
     private HocPhiModel hocPhiModel;
-//    private SinhVienController sinhVienController;
     private String hocKySelect;
     private SinhVienModel sinhVienModel;
     private LopModel lopModel;
@@ -114,6 +113,21 @@ public class HocPhiController extends ActionUtil{
             super.changeStateView();
             sinhVien = new SinhVien(sinhVienModel.getSVTheoMaSinhVien(hocPhi.getCodeStudent()));
             sinhVien.setName_Lop(khoamodel.getTenLopTheoMaLop(sinhVien.getCode_class()));
+            List<String> listMonHoc = new ArrayList<>(chuongTrinhHocModel.getListMonHoc(hocKySelect, sinhVien.getCode_khoa()));
+            for (String listMonHoc1 : listMonHoc) {
+                chiTietHocPhi = khoamodel.getChiTietHocPhi(listMonHoc1, sinhVien.getCode());
+                listChiTietHocPhi.add(chiTietHocPhi);
+                tongHocPhi += chiTietHocPhi.getHocPhi();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessagesUtils.error("", e.toString());
+        }
+    }
+    public void getListCHiTietHocPhiTheoKy() {
+        listChiTietHocPhi.clear();
+        tongHocPhi = 0;
+        try {
             List<String> listMonHoc = new ArrayList<>(chuongTrinhHocModel.getListMonHoc(hocKySelect, sinhVien.getCode_khoa()));
             for (String listMonHoc1 : listMonHoc) {
                 chiTietHocPhi = khoamodel.getChiTietHocPhi(listMonHoc1, sinhVien.getCode());

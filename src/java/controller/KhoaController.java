@@ -116,28 +116,28 @@ public class KhoaController extends ActionUtil {
                 if (isKhoa) {
                     khoaModel.addKhoa(khoa);
                     mlstKhoa.add(0, khoa);
-                    MessagesUtils.info("", "OK ADD!");
+                    MessagesUtils.info("", "Thêm khoa thành công!");
                 }
                 if (isLop) {
                     khoaModel.addLop(lop);
                     mlstLop.add(0, lop);
-                    MessagesUtils.info("", "OK ADD!");
+                    MessagesUtils.info("", "Thêm lớp thành công!");
                 }
                 if (isMonHoc) {
                     khoaModel.addMonHoc(monHoc);
                     mlstMonHoc.add(0, monHoc);
-                    MessagesUtils.info("", "OK ADD!");
+                    MessagesUtils.info("", "Thêm ôn học thành công!");
                 }
                 if (isHocKy) {
                     hocKyModel.addHocKy(hocKy);
                     mlstHocKy.add(0, hocKy);
-                    MessagesUtils.info("", "OK ADD!");
+                    MessagesUtils.info("", "Thêm học kỳ thành công!");
                 }
                 if (isChuongTrinhHoc) {
                     if(checkChuongTrinhHoc(chuongTrinhHoc.getCodeKhoa(), chuongTrinhHoc.getCodeHK())) {
                         chuongTrinhHocModel.addChuongTrinhHoc(chuongTrinhHoc);
                         mlstChuongTrinhHoc.add(0, chuongTrinhHoc);
-                        MessagesUtils.info("", "OK ADD!");
+                        MessagesUtils.info("", "Thêm chương trình học thành công!");
                     }else {
                         MessagesUtils.error("", "Chương Trình Học đã tồn tại");
                     }
@@ -632,13 +632,14 @@ public class KhoaController extends ActionUtil {
             for (MonHoc mlstMonHoc1 : mlstMonHoc) {
                 if(mlstMonHoc1.getMaMon().equals(maMonHoc)){
                     if(i == 0){
-                        s += mlstMonHoc1.getTenMon();
+                        s = mlstMonHoc1.getTenMon();
                     }else{
                        s += ", " + mlstMonHoc1.getTenMon(); 
                     }
                 }
-                i++;
+                
             }
+            i++;
         }
         i = 0;
         return s;

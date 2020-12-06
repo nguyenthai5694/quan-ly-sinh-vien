@@ -56,7 +56,7 @@ public class SinhVienModel extends ConnectionUtil{
     public List<SinhVien> getListSinhVienTheoLop(String maLop) throws Exception {
         List<SinhVien> lstReturn = new ArrayList<SinhVien>();
         String strSQL="select * from student where code_class = ? and status = 1 order by name";
-       
+        int i = 1;
         try {
             open();
             mStmt = mConnection.prepareStatement(strSQL);
@@ -80,13 +80,16 @@ public class SinhVienModel extends ConnectionUtil{
                 user.setChg_who(mRs.getString("chg_who"));
                 user.setChg_date(mRs.getDate("chg_date"));
                 user.setStatus(mRs.getInt("status"));
+                user.setStt(i);
                 lstReturn.add(user);
+                i++;
             }
         } finally {
             close();
         }
         return lstReturn;
     }
+    
     public List<SinhVien> getAllSinhVien() throws Exception {
         List<SinhVien> lstReturn = new ArrayList<SinhVien>();
         String strSQL="select * from student where status = 1 order by name";

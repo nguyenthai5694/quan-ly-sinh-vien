@@ -115,14 +115,33 @@ public class HocPhiModel extends ConnectionUtil {
         }
         return total;
     }
+    public int getTongTCTheoHK(String codeSV, String codeHK) throws Exception {
+        int totalTC = 0;
+        String strSQL = "SELECT * FROM hoc_phi where code_hk = ? and code_student = ?";
+        try {
+            open();
+            mStmt = mConnection.prepareStatement(strSQL);
+            mStmt.setString(1, codeHK);
+            mStmt.setString(2, codeSV);
+            mRs = mStmt.executeQuery();
+            while (mRs.next()) {
+                totalTC += mRs.getInt("total_tc");
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            close();
+        }
+        return totalTC;
+    }
     public void addHocPhi(HocPhi hocPhi) throws Exception {
         String strSQL = "insert into hoc_phi(\n"
                 + "code_hk,\n"
                 + "code_student,\n"
                 + "total_tc,\n"
                 + "total_tien,\n"
-                + "status) \n"
-                + "values(?,?,?,?,0)";
+                + "status, date) \n"
+                + "values(?,?,?,?,0, sysdate())";
         try {
             open();
             mStmt = mConnection.prepareStatement(strSQL, Statement.RETURN_GENERATED_KEYS);
@@ -130,7 +149,6 @@ public class HocPhiModel extends ConnectionUtil {
             mStmt.setString(2, hocPhi.getCodeStudent());
             mStmt.setLong(3, hocPhi.getTotalTC());
             mStmt.setDouble(4, hocPhi.getTotalTien());
-//            mStmt.setString(5, hocPhi.getStatus());
             mStmt.executeUpdate();
             mRs = mStmt.getGeneratedKeys();
             if (mRs.next()) {

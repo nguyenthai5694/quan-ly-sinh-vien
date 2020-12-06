@@ -30,4 +30,20 @@ public class LoginModel extends ConnectionUtil {
         }
         return blCheck;
     }
+    public int getDec(String username) throws Exception {
+        int blCheck = 0;
+        String strSQL = "select * from user where username = ? and status = '1' ";
+        try {
+            open();
+            mStmt = mConnection.prepareStatement(strSQL);
+            mStmt.setString(1, username);
+            mRs = mStmt.executeQuery();
+            while (mRs.next()) {
+                blCheck = mRs.getInt("dec");
+            }
+        } finally {
+            close();
+        }
+        return blCheck;
+    }
 }

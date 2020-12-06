@@ -30,6 +30,13 @@ public class SinhVien {
     private String chg_who;
     private Date chg_date;
     private int status;
+    private int diemDanh;
+    private String decscriptionDiemDanh;
+    private int stt;
+    private double diemA;
+    private double diemB;
+    private double DiemC;
+    private String decscriptionDiem;
 
     public SinhVien() {
     }
@@ -217,6 +224,62 @@ public class SinhVien {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getDiemDanh() {
+        return diemDanh;
+    }
+
+    public void setDiemDanh(int diemDanh) {
+        this.diemDanh = diemDanh;
+    }
+
+    public String getDecscriptionDiemDanh() {
+        return decscriptionDiemDanh;
+    }
+
+    public void setDecscriptionDiemDanh(String decscriptionDiemDanh) {
+        this.decscriptionDiemDanh = decscriptionDiemDanh;
+    }
+
+    public int getStt() {
+        return stt;
+    }
+
+    public void setStt(int stt) {
+        this.stt = stt;
+    }
+
+    public double getDiemA() {
+        return diemA;
+    }
+
+    public void setDiemA(double diemA) {
+        this.diemA = diemA;
+    }
+
+    public double getDiemB() {
+        return diemB;
+    }
+
+    public void setDiemB(double diemB) {
+        this.diemB = diemB;
+    }
+
+    public double getDiemC() {
+        return DiemC;
+    }
+
+    public void setDiemC(double DiemC) {
+        this.DiemC = DiemC;
+    }
+
+    public String getDecscriptionDiem() {
+        return decscriptionDiem;
+    }
+
+    public void setDecscriptionDiem(String decscriptionDiem) {
+        this.decscriptionDiem = decscriptionDiem;
     }
     
 }
